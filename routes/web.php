@@ -1,6 +1,9 @@
 <?php
 
+use App\Models\OtherMedicalJob;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EmployerController;
+use App\Http\Controllers\OtherMedicalJobController;
 use App\Http\Controllers\NurseApplicationController;
 
 Route::get('/', function () {
@@ -8,8 +11,11 @@ Route::get('/', function () {
 })->name('home');
 
 
+Route::get('/other/medical/jobs', [OtherMedicalJobController::class, 'index'])->name('other.form');
+Route::post('/other/medical/jobs', [OtherMedicalJobController::class, 'store'])->name('other.store');
 
-//Job Seeker Route Controller
+
+//Nursing application Route Controller
 Route::get('/processing/job/nationality', [NurseApplicationController::class, 'showStep'])->name('form.step');
 Route::post('/processing/job/nationality', [NurseApplicationController::class, 'postStep']);
 
@@ -49,3 +55,24 @@ Route::post('/processing/job/contact', [NurseApplicationController::class, 'post
 
 
 Route::get('/work-country', [NurseApplicationController::class, 'skipPage'])->name('skip.page');
+
+
+//Employers route Controller
+Route::get('/listing/job/company-location', [EmployerController::class, 'showPage'])->name('form.page');
+Route::post('/listing/job/company-location', [EmployerController::class, 'postPage']);
+
+Route::get('/listing/job/company-city', [EmployerController::class, 'showPage1'])->name('form.page1');
+Route::post('/listing/job/company-city', [EmployerController::class, 'postPage1']);
+
+Route::get('/listing/job/profession', [EmployerController::class, 'showPage2'])->name('form.page2');
+Route::post('/listing/job/profession', [EmployerController::class, 'postPage2']);
+
+Route::get('/listing/job/time-frame', [EmployerController::class, 'showPage3'])->name('form.page3');
+Route::post('/listing/job/time-frame', [EmployerController::class, 'postPage3']);
+
+Route::get('/listing/job/salary-rate', [EmployerController::class, 'showPage4'])->name('form.page4');
+Route::post('/listing/job/salary-rate', [EmployerController::class, 'postPage4']);
+
+Route::get('/listing/job/contact-information', [EmployerController::class, 'viewLastPage'])->name('form.submit');
+Route::post('/listing/job/contact-information', [EmployerController::class, 'postLastPage']);
+

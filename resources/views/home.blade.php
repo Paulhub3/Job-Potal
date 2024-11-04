@@ -4,7 +4,7 @@
 <div class="w-full min-h-screen">
     <div class="grid md:grid-cols-2 grid-cols-1 gap-0">
         <!-- Medical Jobs Section -->
-        <div class="relative h-[600px] md:h-screen">
+        <div class="relative h-[750px] md:h-screen">
             <!-- Background Image with Overlay -->
             <div class="absolute inset-0 bg-black/80">
                 <img
@@ -52,10 +52,10 @@
                 </ul>
 
                 <div class="flex flex-wrap gap-4">
-                    <a href="/nursing-jobs" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md transition duration-300">
+                    <a href="{{ route('form.step') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md transition duration-300">
                         Find Nursing Jobs
                     </a>
-                    <a href="/employer" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md transition duration-300">
+                    <a href="{{ route('form.page') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md transition duration-300">
                         Employer
                     </a>
                     <a href="/medical-jobs" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-md transition duration-300">
@@ -66,7 +66,7 @@
         </div>
 
         <!-- Other Professions Section -->
-        <div class="relative h-[600px] md:h-screen">
+        <div class="relative h-[700px] md:h-screen">
             <!-- Background Image with Overlay -->
             <div class="absolute inset-0 bg-black/80">
                 <img
