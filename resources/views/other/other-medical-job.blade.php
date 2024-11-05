@@ -96,8 +96,21 @@
                         <option value="">Choose Specialty</option>
                         @php
                             $specialties = [
-                                'Accident and Emergency Medicine', 'Allergology and Immunology',
-                                // ... [Add all specialties here]
+                                'Accident and Emergency Medicine','Allergology and Immunology','Anatomical Pathology',
+                                'Anesthesiology','Biomedical Analyst','Cardiology','Cardio-Thoracic surgery',
+                                'Chemical Pathology','Child and Adolescents psychiatry','Child Neurology','Child Neurophysiology',
+                                'Dentistry','Dermatology and Venerology','Emergency Medicine','Endocrinology','Family Medicine',
+                                'Forensic psychiatry','Gastroenterology','Geriatrics','Hematology','Infectious Diseases','Internal Medicine',
+                                'Laboratory Medicine','Mammography','Medical Genetics','Microbiology','Midwife','Neonatology',
+                                'Nephology',  'Neurosurgery','Obstetrics and Gynecology','Occupational Medicine','Occupational Medicine','Oncological Radiography',
+                                'Oncological Radiography','Nuclear Medicine','Obstetrics and Gynecology','Occupational Medicine',
+                                'Oncological Radiography','Oncology','Ophthalmology','Neurosurgery','Nuclear Medicine','Obstetrics and Gynecology',
+                                'Occupational Medicine','Oncological Radiography','Oncology','Ophthalmology','Oral and Maxillofacial surgery',
+                                'Otorhinolaryngology','Pathology','Pediatric Cardiology','Pediatric Gastroenterology','Pediatric Oncology and Hematology',
+                                'Pediatric surgery','Podiatrist','Pharmacist','Psychotherapist','Plastic surgery','Psychiatrist',
+                                'Public Health and Preventive Medicine','Pulmonology','Radiology','Radiology technician/Radiographer',
+                                'Rehabilitation Medicine','Rheumatology','Sport Medicine','Surgery-General','Toxicology','Transfusion Medicine',
+                                'Trauma and Orthopedics','Tropical Medicine','Urology', 'Vascular surgery','Other',
                             ];
                         @endphp
                         @foreach($specialties as $specialty)
@@ -111,7 +124,7 @@
                 <!-- Secondary Specialty -->
                 <div class="space-y-2">
                     <select name="secondary_specialty"
-                            class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-400 focus:ring-1 focus:ring-gray-300 outline-none text-gray-700">
+                            class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-400 focus:ring-1 focus:ring-gray-300 outline-none text-gray-700 @error('primary_specialty') border-red-500 @enderror">
                         <option value="">Choose Second Specialty (Optional)</option>
                         @foreach($specialties as $specialty)
                             <option value="{{ $specialty }}" {{ old('secondary_specialty') == $specialty ? 'selected' : '' }}>
@@ -409,28 +422,38 @@
     </div>
 </div>
 
+
 <script>
 // Language Proficiency Toggle
 document.querySelectorAll('input[name="languages[]"]').forEach(function(checkbox) {
     checkbox.addEventListener('change', function() {
         const selectedLanguages = Array.from(document.querySelectorAll('input[name="languages[]"]:checked')).map(cb => cb.value);
         const proficiencyContainer = document.getElementById('languageProficiency');
+        const oldProficiencies = @json(old('language_proficiency', [])); // Get old input if any
+
         proficiencyContainer.innerHTML = '';
 
         if (selectedLanguages.length > 0) {
             proficiencyContainer.classList.remove('hidden');
             selectedLanguages.forEach(function(language) {
                 const div = document.createElement('div');
-                div.classList.add('mb-2');
+                div.classList.add('mb-4');
+
+                // Get old value for this language if it exists
+                const oldValue = oldProficiencies[language] || '';
+
                 div.innerHTML = `
-                    <label class="block text-gray-700 mb-2">${language} Proficiency</label>
-                    <select name="language_proficiency[${language}]" class="w-full p-3 border rounded">
-                        <option value="A1">A1 - Beginner</option>
-                        <option value="A2">A2 - Elementary</option>
-                        <option value="B1">B1 - Intermediate</option>
-                        <option value="B2">B2 - Upper Intermediate</option>
-                        <option value="C1">C1 - Advanced</option>
-                        <option value="C2">C2 - Mastery</option>
+                    <label class="block text-gray-700 mb-2">${language} Proficiency Level</label>
+                    <select name="language_proficiency[${language}]"
+                            class="w-full p-3 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none"
+                            required>
+                        <option value="">Select Proficiency Level</option>
+                        <option value="A1" ${oldValue === 'A1' ? 'selected' : ''}>A1 - Beginner</option>
+                        <option value="A2" ${oldValue === 'A2' ? 'selected' : ''}>A2 - Elementary</option>
+                        <option value="B1" ${oldValue === 'B1' ? 'selected' : ''}>B1 - Intermediate</option>
+                        <option value="B2" ${oldValue === 'B2' ? 'selected' : ''}>B2 - Upper Intermediate</option>
+                        <option value="C1" ${oldValue === 'C1' ? 'selected' : ''}>C1 - Advanced</option>
+                        <option value="C2" ${oldValue === 'C2' ? 'selected' : ''}>C2 - Mastery</option>
                     </select>
                 `;
                 proficiencyContainer.appendChild(div);
@@ -441,46 +464,11 @@ document.querySelectorAll('input[name="languages[]"]').forEach(function(checkbox
     });
 });
 
-// File Upload Validation
-document.getElementById('cv').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-    const errorElement = document.getElementById('cvError');
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    const maxSize = 2 * 1024 * 1024; // 2MB
-
-    if (file) {
-        if (!allowedTypes.includes(file.type)) {
-            errorElement.textContent = 'Invalid file type. Please upload a PDF or Word document.';
-            errorElement.classList.remove('hidden');
-            event.target.value = '';
-        } else if (file.size > maxSize) {
-            errorElement.textContent = 'File size must be less than 2MB.';
-            errorElement.classList.remove('hidden');
-            event.target.value = '';
-        } else {
-            errorElement.classList.add('hidden');
-        }
-    }
-});
-
-// Form Validation
-document.getElementById('employeeForm').addEventListener('submit', function(event) {
-    const Fields = document.querySelectorAll('[]');
-    let isValid = true;
-
-    Fields.forEach(field => {
-        if (!field.value.trim()) {
-            field.classList.add('border-red-500');
-            isValid = false;
-        } else {
-            field.classList.remove('border-red-500');
-        }
+// Trigger change event on page load for pre-selected languages
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('input[name="languages[]"]:checked').forEach(function(checkbox) {
+        checkbox.dispatchEvent(new Event('change'));
     });
-
-    if (!isValid) {
-        event.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
 });
 </script>
 @endsection

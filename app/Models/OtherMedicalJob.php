@@ -42,4 +42,18 @@ class OtherMedicalJob extends Model
         'contact_consent' => 'boolean',
         'privacy_consent' => 'boolean'
     ];
+
+
+     // Helper method to get language proficiency
+     public function getLanguageProficiencyFormatted()
+     {
+         $proficiency = $this->language_proficiency;
+         $formatted = [];
+
+         foreach ($proficiency as $language => $level) {
+             $formatted[] = "$language: $level";
+         }
+
+         return $formatted;
+     }
 }

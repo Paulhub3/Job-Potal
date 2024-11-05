@@ -29,7 +29,7 @@ return new class extends Migration
             $table->text('address');
             $table->string('zip_code');
             $table->json('languages');
-            $table->json('language_proficiency')->nullable();
+            $table->json('language_proficiency');
             $table->enum('job_type', ['Full-time', 'Part-time']);
             $table->enum('contact_method', ['Email Address', 'Whatsapp']);
             $table->text('additional_info')->nullable();
