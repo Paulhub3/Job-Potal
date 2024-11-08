@@ -2,23 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class OtherMedicalJob extends Model
+class OtherProffessionEmployee extends Model
 {
-
-    use HasFactory;
-
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'full_name',
         'email',
-        'primary_specialty',
-        'secondary_specialty',
+        'dob',
         'phone_number',
         'gender',
-        'eu_license',
+        'profession',
+        'degree_level',
+        'job_experience',
+        'previous_employer',
+        'previous_position',
         'cv_path',
         'country_of_origin',
         'present_country',
@@ -32,31 +30,29 @@ class OtherMedicalJob extends Model
         'contact_method',
         'additional_info',
         'contact_consent',
-        'privacy_consent'
+        'privacy_consent',
     ];
 
     protected $casts = [
+        'dob' => 'date',
         'preferred_countries' => 'array',
         'languages' => 'array',
         'language_proficiency' => 'array',
         'contact_consent' => 'boolean',
-        'privacy_consent' => 'boolean'
+        'privacy_consent' => 'boolean',
     ];
 
 
-    
+    // Helper method to get language proficiency
+    public function getLanguageProficiencyFormatted()
+    {
+        $proficiency = $this->language_proficiency;
+        $formatted = [];
 
+        foreach ($proficiency as $language => $level) {
+            $formatted[] = "$language: $level";
+        }
 
-     // Helper method to get language proficiency
-     public function getLanguageProficiencyFormatted()
-     {
-         $proficiency = $this->language_proficiency;
-         $formatted = [];
-
-         foreach ($proficiency as $language => $level) {
-             $formatted[] = "$language: $level";
-         }
-
-         return $formatted;
-     }
+        return $formatted;
+    }
 }

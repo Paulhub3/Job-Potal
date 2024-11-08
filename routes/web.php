@@ -5,12 +5,25 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\OtherMedicalJobController;
 use App\Http\Controllers\NurseApplicationController;
+use App\Http\Controllers\OtherProffessionEmployeeController;
 
 Route::get('/', function () {
     return view('home');
 })->name('home');
 
 
+Route::get('/employer', function () {
+    return view('other-proffessions.employer');
+});
+
+
+//Other proffessional Jobs Employee
+Route::get('/other/proffession/employee', [OtherProffessionEmployeeController::class, 'index'])->name('other-proffessions.employee');
+Route::post('/other/proffession/employee', [OtherProffessionEmployeeController::class, 'store'])->name('other-proffessions.storeEmployee');
+
+
+
+//Other Medical Jobs
 Route::get('/other/medical/jobs', [OtherMedicalJobController::class, 'index'])->name('other.form');
 Route::post('/other/medical/jobs', [OtherMedicalJobController::class, 'store'])->name('other.store');
 

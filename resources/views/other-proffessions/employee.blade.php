@@ -5,7 +5,7 @@
 <div class="min-h-screen bg-gray-100 py-8">
     <div class="max-w-7xl mx-auto mt-24 p-3 md:p-6">
         <!-- Header -->
-        <h2 class="text-4xl md:text-5xl font-bold mb-4 text-center text-blue-500">Registration Form</h2>
+        <h2 class="text-2xl md:text-5xl font-bold mb-4 text-center text-blue-500">Employee Registration Form</h2>
 
         <!-- Error Messages -->
         @if ($errors->any())
@@ -44,7 +44,7 @@
         @endif
 
         <form id="employeeForm"
-              action="{{ route('other.store') }}"
+              action="{{ route('other-proffessions.storeEmployee') }}"
               method="POST"
               enctype="multipart/form-data"
               class="space-y-6 bg-white rounded-lg shadow-md p-4 md:p-8 mt-10 pb-16">
@@ -55,21 +55,11 @@
                 <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Personal Information</h3>
                 <div class="flex w-full">
                     <input type="text"
-                           id="firstName"
-                           name="first_name"
-                           value="{{ old('first_name') }}"
-                           class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none @error('first_name') border-red-500 @enderror"
-                           placeholder="First Name"
-                           >
-                </div>
-
-                <div>
-                    <input type="text"
-                           id="lastName"
-                           name="last_name"
-                           value="{{ old('last_name') }}"
-                           class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none @error('last_name') border-red-500 @enderror"
-                           placeholder="Last Name"
+                           id="fullName"
+                           name="full_name"
+                           value="{{ old('full_name') }}"
+                           class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none @error('full_name') border-red-500 @enderror"
+                           placeholder="Full Name"
                            >
                 </div>
 
@@ -82,57 +72,21 @@
                            placeholder="Email Address"
                            >
                 </div>
+
+                <div>
+                    <input type="date"
+                           id="dobForm"
+                           name="dob"
+                           value="{{ old('dob') }}"
+                           class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none @error('dob') border-red-500 @enderror"
+                           placeholder="Date of Birth"
+                           >
+                </div>
             </div>
 
             <!-- Professional Information Section -->
             <div class="space-y-6">
                 <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Professional Information</h3>
-
-                <!-- Primary Specialty -->
-                <div class="space-y-2">
-                    <select name="primary_specialty"
-                            class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-400 focus:ring-1 focus:ring-gray-300 outline-none text-gray-700 @error('primary_specialty') border-red-500 @enderror"
-                            >
-                        <option value="">Choose Specialty</option>
-                        @php
-                            $specialties = [
-                                'Accident and Emergency Medicine','Allergology and Immunology','Anatomical Pathology',
-                                'Anesthesiology','Biomedical Analyst','Cardiology','Cardio-Thoracic surgery',
-                                'Chemical Pathology','Child and Adolescents psychiatry','Child Neurology','Child Neurophysiology',
-                                'Dentistry','Dermatology and Venerology','Emergency Medicine','Endocrinology','Family Medicine',
-                                'Forensic psychiatry','Gastroenterology','Geriatrics','Hematology','Infectious Diseases','Internal Medicine',
-                                'Laboratory Medicine','Mammography','Medical Genetics','Microbiology','Midwife','Neonatology',
-                                'Nephology',  'Neurosurgery','Obstetrics and Gynecology','Occupational Medicine','Occupational Medicine','Oncological Radiography',
-                                'Oncological Radiography','Nuclear Medicine','Obstetrics and Gynecology','Occupational Medicine',
-                                'Oncological Radiography','Oncology','Ophthalmology','Neurosurgery','Nuclear Medicine','Obstetrics and Gynecology',
-                                'Occupational Medicine','Oncological Radiography','Oncology','Ophthalmology','Oral and Maxillofacial surgery',
-                                'Otorhinolaryngology','Pathology','Pediatric Cardiology','Pediatric Gastroenterology','Pediatric Oncology and Hematology',
-                                'Pediatric surgery','Podiatrist','Pharmacist','Psychotherapist','Plastic surgery','Psychiatrist',
-                                'Public Health and Preventive Medicine','Pulmonology','Radiology','Radiology technician/Radiographer',
-                                'Rehabilitation Medicine','Rheumatology','Sport Medicine','Surgery-General','Toxicology','Transfusion Medicine',
-                                'Trauma and Orthopedics','Tropical Medicine','Urology', 'Vascular surgery','Other',
-                            ];
-                        @endphp
-                        @foreach($specialties as $specialty)
-                            <option value="{{ $specialty }}" {{ old('primary_specialty') == $specialty ? 'selected' : '' }}>
-                                {{ $specialty }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- Secondary Specialty -->
-                <div class="space-y-2">
-                    <select name="secondary_specialty"
-                            class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-400 focus:ring-1 focus:ring-gray-300 outline-none text-gray-700 @error('primary_specialty') border-red-500 @enderror">
-                        <option value="">Choose Second Specialty (Optional)</option>
-                        @foreach($specialties as $specialty)
-                            <option value="{{ $specialty }}" {{ old('secondary_specialty') == $specialty ? 'selected' : '' }}>
-                                {{ $specialty }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
 
                 <!-- Contact Information -->
                 <div>
@@ -148,7 +102,7 @@
                 <!-- Gender Selection -->
                 <div class="space-y-2">
                     <label class="block text-gray-700">Gender</label>
-                    <div class="flex gap-6">
+                    <div class="flex flex-col md:flex md:flex-row md:gap-6">
                         @foreach(['Male', 'Female', 'Non-disclosure'] as $gender)
                             <label class="inline-flex items-center">
                                 <input type="radio"
@@ -163,15 +117,123 @@
                     </div>
                 </div>
 
-                <!-- License Information -->
+                <!-- Profession -->
                 <div>
-                    <label class="block text-gray-700 mb-2" for="license">What EU license do you have to practice?</label>
+                    <label class="block text-gray-700 mb-2" for="license">What is your profession?</label>
                     <input type="text"
-                           id="license"
-                           name="eu_license"
-                           value="{{ old('eu_license') }}"
-                           class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none @error('eu_license') border-red-500 @enderror"
+                           id="profession"
+                           name="profession"
+                           value="{{ old('profession') }}"
+                           class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none @error('profession') border-red-500 @enderror"
                            >
+                </div>
+
+                <!-- Degree Level -->
+                <div class="mb-4">
+                    <label for="degree" class="block text-gray-700 mb-2 ">
+                        Degree Level
+                    </label>
+
+                    <select id="degree"
+                            name="degree_level"
+                            class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none text-gray-700 @error('degree_level') border-red-500 @enderror"
+                            >
+                        <option value="" disabled {{ old('degree_level') ? '' : 'selected' }}>Select your degree level</option>
+                        <option value="Bachelors Degree" {{ old('degree_level') == "Bachelor's Degree" ? 'selected' : '' }}>
+                            Bachelors Degree
+                        </option>
+                        <option value="Master's Degree" {{ old('degree_level') == "Master's Degree" ? 'selected' : '' }}>
+                            Masters Degree
+                        </option>
+                        <option value="Doctorate (Ph.D.)" {{ old('degree_level') == "Doctorate (Ph.D.)" ? 'selected' : '' }}>
+                            Doctorate (Ph.D.)
+                        </option>
+                        <option value="Professional Degrees" {{ old('degree_level') == "Professional Degrees" ? 'selected' : '' }}>
+                            Professional Degrees
+                        </option>
+                        <option value="Vocational Training and Diplomas" {{ old('degree_level') == "Vocational Training and Diplomas" ? 'selected' : '' }}>
+                            Vocational Training and Diplomas
+                        </option>
+                    </select>
+
+                    @error('degree_level')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="jobExperience" class="block text-gray-700 mb-2 ">Job Experience</label>
+                    <p class="flex text-sm text-gray-500 mb-2">
+                        <span class="text-red-500 text-xl mr-1">*</span>
+                        Specify your years of experience
+                    </p>
+
+                    <select id="jobExperience"
+                            name="job_experience"
+                            class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none text-gray-700 @error('job_experience') border-red-500 @enderror"
+                            >
+                        <option value="" disabled {{ old('job_experience') ? '' : 'selected' }}>Select Job Experience</option>
+                        <option value="Less than 1 year" {{ old('job_experience') == "Less than 1 year" ? 'selected' : '' }}>
+                            Less than 1 year
+                        </option>
+                        <option value="1 - 2 years" {{ old('job_experience') == "1 - 2 years" ? 'selected' : '' }}>
+                            1 - 2 years
+                        </option>
+                        <option value="3 - 5 years" {{ old('job_experience') == "3 - 5 years" ? 'selected' : '' }}>
+                            3 - 5 years
+                        </option>
+                        <option value="5 - 10 years" {{ old('job_experience') == "5 - 10 years" ? 'selected' : '' }}>
+                            5 - 10 years
+                        </option>
+                        <option value="10+ years" {{ old('job_experience') == "10+ years" ? 'selected' : '' }}>
+                            10+ years
+                        </option>
+                    </select>
+
+                    @error('job_experience')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Previous Employment Section -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Previous Employment</h3>
+
+                    <!-- Previous Employer -->
+                    <div class="mb-4">
+                        <label for="previous_employer" class="block text-gray-700 mb-2">
+                            Previous Employer
+                            <span class="text-gray-500 text-sm ml-1">(Optional)</span>
+                        </label>
+                        <input type="text"
+                            id="previous_employer"
+                            name="previous_employer"
+                            value="{{ old('previous_employer') }}"
+                            placeholder="Enter your previous employer's name"
+                            class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none transition-colors
+                                    @error('previous_employer') border-red-500 @enderror">
+                        @error('previous_employer')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Previous Position -->
+                    <div class="mb-4">
+                        <label for="previous_position" class="block text-gray-700 mb-2">
+                            Previous Position Held
+                            <span class="text-gray-500 text-sm ml-1">(Optional)</span>
+                        </label>
+                        <input type="text"
+                            id="previous_position"
+                            name="previous_position"
+                            value="{{ old('previous_position') }}"
+                            placeholder="Enter your previous job title"
+                            class="w-full p-4 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none transition-colors
+                                    @error('previous_position') border-red-500 @enderror">
+                        @error('previous_position')
+                            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
                 <!-- CV Upload -->
@@ -450,7 +512,7 @@ document.querySelectorAll('input[name="languages[]"]').forEach(function(checkbox
                     <label class="block text-gray-700 mb-2">${language} Proficiency Level</label>
                     <select name="language_proficiency[${language}]"
                             class="w-full p-3 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none"
-                            required>
+                            >
                         <option value="">Select Proficiency Level</option>
                         <option value="A1" ${oldValue === 'A1' ? 'selected' : ''}>A1 - Beginner</option>
                         <option value="A2" ${oldValue === 'A2' ? 'selected' : ''}>A2 - Elementary</option>

@@ -58,7 +58,7 @@
                     <a href="{{ route('form.page') }}" class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-md transition duration-300">
                         Employer
                     </a>
-                    <a href="/medical-jobs" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-md transition duration-300">
+                    <a href="{{ route('other.store') }}" class="bg-gray-700 hover:bg-gray-800 text-white px-6 py-3 rounded-md transition duration-300">
                         Other Medical Jobs
                     </a>
                 </div>
@@ -109,7 +109,7 @@
                 </ul>
 
                 <div class="flex flex-wrap gap-4">
-                    <a href="/find-job" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition duration-300">
+                    <a href="{{ route('other-proffessions.employee') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition duration-300">
                         Find Job
                     </a>
                     <a href="/employer" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition duration-300">
