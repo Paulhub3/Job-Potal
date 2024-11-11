@@ -11,7 +11,7 @@ class OtherProffessionEmployeeController extends Controller
 {
     public function index()
     {
-        return view('other-proffessions.employee');
+        return view('other-proffessions.employer');
     }
 
     public function store(Request $request)

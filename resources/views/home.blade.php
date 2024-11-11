@@ -112,7 +112,7 @@
                     <a href="{{ route('other-proffessions.employee') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition duration-300">
                         Find Job
                     </a>
-                    <a href="/employer" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition duration-300">
+                    <a href="{{ route('other-proffessions.employer') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md transition duration-300">
                         Employer
                     </a>
                 </div>

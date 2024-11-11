@@ -4,17 +4,28 @@ use App\Models\OtherMedicalJob;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\OtherMedicalJobController;
+use App\Http\Controllers\Users\UserLoginController;
 use App\Http\Controllers\NurseApplicationController;
 use App\Http\Controllers\OtherProffessionEmployeeController;
+use App\Http\Controllers\OtherProffessionEmployerController;
 
 Route::get('/', function () {
     return view('home');
 })->name('home');
 
 
-Route::get('/employer', function () {
-    return view('other-proffessions.employer');
-});
+Route::get('/remote/control/dashboard', function () {
+    return view('user.dashboard');
+})->name('home');
+
+//Adim USer Login
+Route::get('/remote/control/login', [UserLoginController::class, 'index'])->name('login');
+
+
+//Other proffessional Jobs Employer
+Route::get('/other/proffession/employer', [OtherProffessionEmployerController::class, 'index'])->name('other-proffessions.employer');
+Route::post('/other/proffession/employer', [OtherProffessionEmployerController::class, 'store'])->name('other-proffessions.storeEmployer');
+
 
 
 //Other proffessional Jobs Employee
