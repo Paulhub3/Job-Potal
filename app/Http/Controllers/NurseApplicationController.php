@@ -360,70 +360,72 @@ class NurseApplicationController extends Controller
 
     public function postLast(Request $request)
     {
-         // Validate the data
-         $request->validate([
-            'gender' => 'required|string',
-            'first_name' => 'required|string|max:255',
-            'middle_name' => 'nullable|string|max:255',
-            'surname' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone_number' => 'required|string|max:15',
-        ]);
+        try {
+            // Validate the data
+            $request->validate([
+                'gender' => 'required|string',
+                'first_name' => 'required|string|max:255',
+                'middle_name' => 'nullable|string|max:255',
+                'surname' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'phone_number' => 'required|string|max:15',
+            ]);
 
-        // Store the final step data in session
-        Session::put('form.complete', $request->only([
-            'gender',
-            'first_name',
-            'middle_name',
-            'surname',
-            'email',
-            'phone_number',
-        ]));
+            // Store the final step data in session
+            Session::put('form.complete', $request->only([
+                'gender',
+                'first_name',
+                'middle_name',
+                'surname',
+                'email',
+                'phone_number',
+            ]));
 
-        // Retrieve all session data
-        $formData = array_merge(
-            Session::get('form.step', []),
-            Session::get('form.step1', []),
-            Session::get('form.step2', []),
-            Session::get('form.step3', []),
-            Session::get('form.step4', []),
-            Session::get('form.step5', []),
-            Session::get('form.step6', []),
-            Session::get('form.step7', []),
-            Session::get('form.step8', []),
-            Session::get('form.step9', []),
-            Session::get('form.step10', []),
-            Session::get('form.complete', [])
-        );
+            // Retrieve all session data
+            $formData = array_merge(
+                Session::get('form.step', []),
+                Session::get('form.step1', []),
+                Session::get('form.step2', []),
+                Session::get('form.step3', []),
+                Session::get('form.step4', []),
+                Session::get('form.step5', []),
+                Session::get('form.step6', []),
+                Session::get('form.step7', []),
+                Session::get('form.step8', []),
+                Session::get('form.step9', []),
+                Session::get('form.step10', []),
+                Session::get('form.complete', [])
+            );
 
-         // Convert arrays to JSON strings
-        if (isset($formData['work_country'])) {
-            $formData['work_country'] = json_encode($formData['work_country']);
+            // Convert arrays to JSON strings
+            if (isset($formData['work_country'])) {
+                $formData['work_country'] = json_encode($formData['work_country']);
+            }
+            if (isset($formData['work_state'])) {
+                $formData['work_state'] = json_encode($formData['work_state']);
+            }
+            if (isset($formData['work_state_postal_code'])) {
+                $formData['work_state_postal_code'] = json_encode($formData['work_state_postal_code']);
+            }
+
+            // Save the data in the database
+            NurseApplcationData::create($formData);
+
+            // Clear the session
+            Session::forget('form');
+
+            // Set success message in session
+            session()->flash('success', 'You have successfully applied for a job. Check your email for our responses.');
+
+            // Redirect to the complete page
+            return redirect()->route('form.step');
+
+        } catch (\Exception $e) {
+            // Set error message in session
+            session()->flash('error', 'An error occurred while submitting your application. Please try again.');
+
+            return redirect()->back();
         }
-        if (isset($formData['work_state'])) {
-            $formData['work_state'] = json_encode($formData['work_state']);
-        }
-        if (isset($formData['work_state_postal_code'])) {
-            $formData['work_state_postal_code'] = json_encode($formData['work_state_postal_code']);
-        }
-
-        // Save the data in the database
-        NurseApplcationData::create($formData);
-
-        // Send the email with the form data to a hardcoded email address using a queue
-
-
-        //$receiverEmail = 'amahandy11@gmail.com';
-        //Mail::to($receiverEmail)->queue(new EmployeeMail($formData));
-
-
-        // Clear the session
-        Session::forget('form');
-
-        Alert::success('job Application', 'you have successfully applied for a jab,  Check your email for our responses');
-
-        // Redirect to the complete page
-        return redirect()->route('form.step');
     }
 
 

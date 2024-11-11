@@ -16,7 +16,7 @@ Route::get('/', function () {
 
 Route::get('/remote/control/dashboard', function () {
     return view('user.dashboard');
-})->name('home');
+})->name('dashboard');
 
 //Adim USer Login
 Route::get('/remote/control/login', [UserLoginController::class, 'index'])->name('login');
