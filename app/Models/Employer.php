@@ -20,6 +20,5 @@ class Employer extends Model
         'email',
         'phone_number',
         'job_description',
-
     ];
 }

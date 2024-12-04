@@ -35,6 +35,44 @@
                     </h1>
                 </div>
 
+                <!-- Error Messages -->
+                @if(session('error'))
+                <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded mt-8">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <ul class="text-sm text-red-600">
+                                {{ session('error') }}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                 <!-- Error Messages -->
+                 @if ($errors->any())
+                 <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded mt-8">
+                     <div class="flex">
+                         <div class="flex-shrink-0">
+                             <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                             </svg>
+                         </div>
+                         <div class="ml-3">
+                             @foreach ($errors->all() as $error)
+                             <ul class="text-sm text-red-600">
+                                 {{ $error }}
+                             </ul>
+                             @endforeach
+                         </div>
+                     </div>
+                 </div>
+                 @endif
+
                 <!-- Form Fields -->
                 <div class="w-full px-6 mt-10 space-y-5 md:justify-center md:flex md:flex-col md:mt-20">
                     <!-- Company Name -->
@@ -69,13 +107,13 @@
                             Company phone number
                         </label>
                         <input type="tel"
-                               name="phone_number"
-                               pattern="^\+?[1-9]\d{1,14}$"
-                               title="Please enter a valid phone number (e.g., +1234567890 or 1234567890)"
-                               class="block w-full px-4 py-3 text-gray-700 border-2 border-gray-400 rounded-md focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
-                        @error('phone_number')
-                            <div class="mt-2 text-red-600 text-sm animate-shake">{{ $message }}</div>
-                        @enderror
+                            name="phone_number"
+                            pattern="^[+]?[\s./0-9-()]{6,25}$"
+                            title="Please enter a valid phone number (e.g., +1 234 567 890 or +44 20 7123 4567)"
+                            class="block w-full px-4 py-3 text-gray-700 border-2 border-gray-400 rounded-md focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
+                            @error('phone_number')
+                                <div class="mt-2 text-red-600 text-sm animate-shake">{{ $message }}</div>
+                            @enderror
                     </div>
 
                     <!-- Company Address -->

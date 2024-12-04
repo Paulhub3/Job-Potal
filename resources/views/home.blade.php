@@ -8,7 +8,7 @@
             <!-- Background Image with Overlay -->
             <div class="absolute inset-0 bg-black/80">
                 <img
-                    src="/images/medical.bg.jpg"
+                    src="/images/Female-doctor.jpg"
                     alt="Medical Professionals"
                     class="w-full h-full object-cover mix-blend-overlay"
                 >
@@ -70,7 +70,7 @@
             <!-- Background Image with Overlay -->
             <div class="absolute inset-0 bg-black/80">
                 <img
-                    src="/images/other-jobs.jpg"
+                    src="/images/methode_times.jpg"
                     alt="Business Professionals"
                     class="w-full h-full object-cover mix-blend-overlay"
                 >

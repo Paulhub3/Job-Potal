@@ -167,57 +167,89 @@ class EmployerController extends Controller
 
 
      // View for the last page
-     public function viewLastPage(Request $request)
-     {
-         return view('medical-employer.form-complete');
-     }
+    public function viewLastPage(Request $request)
+    {
+        return view('medical-employer.form-complete');
+    }
 
 
-     // Handle form submission
-     public function postLastPage(Request $request)
-     {
-         // Validate the final form data
-         $request->validate([
-             'company_name' => 'required|string|max:255',
-             'email' => 'required|email|max:255',
-             'phone_number' => 'required|string|max:20',
-             'company_address' => 'required|string|max:255',
-             'job_description' => 'required|string',
-         ]);
+    public function postLastPage(Request $request)
+    {
+        try {
+            // Validate the final form data
+            $request->validate([
+                'company_name' => 'required|string|max:255',
+                'email' => 'required|email|max:255|unique:employers,email',
+                'phone_number' => 'required|max:15|unique:employers,phone_number',
+                'company_address' => 'required|string|max:255',
+                'job_description' => 'required|string',
+            ]);
 
-         // Retrieve all relevant data from the session and request
-         $formData = array_merge(
-             Session::get('form.page', []),
-             Session::get('form.page1', []),
-             Session::get('form.page2', []),
-             Session::get('form.page3', []),
-             Session::get('form.page4', []),
+            // Retrieve all relevant data from the session and request
+            $formData = array_merge(
+                Session::get('form.page', []),
+                Session::get('form.page1', []),
+                Session::get('form.page2', []),
+                Session::get('form.page3', []),
+                Session::get('form.page4', []),
+                $request->only(['company_name', 'email', 'phone_number', 'company_address', 'job_description'])
+            );
 
-             $request->only(['company_name', 'email', 'phone_number', 'company_address', 'job_description'])
-         );
+            // Ensure all necessary fields are strings and handle any arrays properly
+            $formData = array_map(function($item) {
+                return is_array($item) ? json_encode($item) : $item;
+            }, $formData);
 
-         // Ensure all necessary fields are strings and handle any arrays properly
-         $formData = array_map(function($item) {
-             return is_array($item) ? json_encode($item) : $item;
-         }, $formData);
+            // Manually adding timestamps
+            $formData['created_at'] = Carbon::now();
+            $formData['updated_at'] = Carbon::now();
 
-         // Manually adding timestamps
-         $formData['created_at'] = Carbon::now();
-         $formData['updated_at'] = Carbon::now();
+            // Insert data into the database
+            Employer::create($formData);
 
-         // Insert data into the database
-         Employer::create($formData);
+            // Send the email with the form data to a hardcoded email address using a queue
+            //$receiverEmail = 'amahandy11@gmail.com';
+            // Mail::to($receiverEmail)->queue(new medical-employerMail($formData));
 
-         // Send the email with the form data to a hardcoded email address using a queue
-         //$receiverEmail = 'amahandy11@gmail.com';
-        // Mail::to($receiverEmail)->queue(new medical-employerMail($formData));
+            // Clear the session
+            Session::flush();
 
-         // Clear the session
-         Session::flush();
+            // Set success message in session
+            session()->flash('success', 'You have successfully requested skill worker. Check your email for our responses');
 
-         Alert::success('Job Request', 'You have successfully requested skill worker. Check your email for our responses');
 
-         // Redirect to a thank you or confirmation page
-         return redirect()->route('form.page');
-     }
+            // Redirect to a thank you or confirmation page
+            return redirect()->route('form.page');
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
+
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Handle database errors
+            $errorMessage = 'Database error occurred: ';
+            if (app()->environment('local')) {
+                $errorMessage .= $e->getMessage();
+            } else {
+                $errorMessage .= 'Please try again later.';
+            }
+            Alert::error('Error', $errorMessage);
+            return redirect()->back()->withInput();
+
+        } catch (\Exception $e) {
+            // Handle other general errors
+            $errorMessage = 'An unexpected error occurred: ';
+            if (app()->environment('local')) {
+                $errorMessage .= $e->getMessage();
+            } else {
+                $errorMessage .= 'Please try again later.';
+            }
+            Alert::error('Error', $errorMessage);
+            return redirect()->back()->withInput();
+        }
+    }
+
+
 }

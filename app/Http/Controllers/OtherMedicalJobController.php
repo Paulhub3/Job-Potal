@@ -13,7 +13,7 @@ class OtherMedicalJobController extends Controller
     {
         return view('other.other-medical-job');
     }
-    
+
     public function store(Request $request)
     {
         try {
@@ -32,7 +32,7 @@ class OtherMedicalJobController extends Controller
                 'eu_license' => 'required|string',
                 'cv' => 'required|file|mimes:pdf,doc,docx|max:2048',
                 'country_of_origin' => 'required|string',
-                'present_country' => 'required|in:Israel,Canada',
+                'present_country' => 'required',
                 'preferred_countries' => 'required|array',
                 'preferred_countries.*' => 'in:Germany,Switzerland,Luxembourg,Austria,Belgium',
                 'start_availability' => 'required|in:Immediately,Later',

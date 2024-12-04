@@ -5,7 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medical Jobs Portal - Login</title>
-    @vite('resources/css/app.css')
+    @production
+    @php
+        $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+    @endphp
+    <link rel="stylesheet" href="{{ asset('build/' . $manifest['resources/css/app.css']['file']) }}">
+    <script type="module" src="{{ asset('build/' . $manifest['resources/js/app.js']['file']) }}"></script>
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endproduction
 </head>
 <body>
 
@@ -22,10 +30,9 @@
         <!-- Background Image with Overlay -->
         <div class="absolute inset-0 bg-gray-700">
             <img
-                src="{{ asset('images/background.jpg') }}"
+                src="{{ asset('images/germany.jpg') }}"
                 alt="Medical Background"
-                class="w-full h-full object-cover mix-blend-overlay"
-            >
+                class="w-full h-full object-cover mix-blend-overlay">
         </div>
 
         <!-- Login Container -->
@@ -42,7 +49,34 @@
                     <p class="text-gray-600 font-medium text-xl">Please sign in to your account</p>
                 </div>
 
-                <form class="mt-8 space-y-9" action="" method="POST">
+                @if (session('error'))
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{{ session('error') }}</span>
+                        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            <svg class="fill-current h-6 w-6 text-red-500" role="button" onclick="this.parentElement.parentElement.remove()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
+                            </svg>
+                        </span>
+                    </div>
+                @endif
+
+                <!-- Success Message -->
+                @if(session('success'))
+                <div class="mb-4 bg-green-50 border-l-4 border-green-500 p-4 rounded mt-8 ">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-green-700">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <form class="mt-8 space-y-9" action="{{ route('login') }}" method="POST">
                     @csrf
                     <div class="space-y-9">
                         <div>
@@ -51,7 +85,6 @@
                                 id="email"
                                 name="email"
                                 type="email"
-                                required
                                 class="mt-1 block w-full p-3 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none">
                             @error('email')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -65,7 +98,6 @@
                                     id="password"
                                     name="password"
                                     type="text"
-                                    required
                                     class="mt-1 block w-full p-3 border-2 border-gray-400 rounded-md focus:border-gray-300 focus:ring-1 focus:ring-gray-300 outline-none pr-12">
                                 <button
                                     type="button"

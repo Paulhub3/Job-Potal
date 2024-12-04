@@ -367,8 +367,8 @@ class NurseApplicationController extends Controller
                 'first_name' => 'required|string|max:255',
                 'middle_name' => 'nullable|string|max:255',
                 'surname' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'phone_number' => 'required|string|max:15',
+                'email' => 'required|email|max:255|unique:nurse_applcation_data,email',
+                'phone_number' => 'required|max:15|unique:nurse_applcation_data,phone_number',
             ]);
 
             // Store the final step data in session
@@ -420,11 +420,33 @@ class NurseApplicationController extends Controller
             // Redirect to the complete page
             return redirect()->route('form.step');
 
-        } catch (\Exception $e) {
-            // Set error message in session
-            session()->flash('error', 'An error occurred while submitting your application. Please try again.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Handle validation errors
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
 
-            return redirect()->back();
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Handle database errors
+            $errorMessage = 'Database error occurred: ';
+            if (app()->environment('local')) {
+                $errorMessage .= $e->getMessage();
+            } else {
+                $errorMessage .= 'Please try again later.';
+            }
+            session()->flash('error', $errorMessage);
+            return redirect()->back()->withInput();
+
+        } catch (\Exception $e) {
+            // Handle other general errors
+            $errorMessage = 'An unexpected error occurred: ';
+            if (app()->environment('local')) {
+                $errorMessage .= $e->getMessage();
+            } else {
+                $errorMessage .= 'Please try again later.';
+            }
+            session()->flash('error', $errorMessage);
+            return redirect()->back()->withInput();
         }
     }
 

@@ -9,6 +9,16 @@
 
     <title>{{ config('app.name', 'Find Job') }}</title>
 
+    @production
+    @php
+        $manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+    @endphp
+    <link rel="stylesheet" href="{{ asset('build/' . $manifest['resources/css/app.css']['file']) }}">
+    <script type="module" src="{{ asset('build/' . $manifest['resources/js/app.js']['file']) }}"></script>
+    @else
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @endproduction
+
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png">
 
@@ -121,7 +131,7 @@
                 </a>
             </div>
         </nav>
-        
+
 
         <!-- Main Content -->
         <main class="flex-grow">
